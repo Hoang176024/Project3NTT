@@ -34,14 +34,21 @@ class AdminWarehouseController extends Controller
             $request->session()->flash('import_error', 'Sản phẩm "'.$product->pro_name.' " mã sản phẩm là '.$id.' chỉ còn '.$product->pro_number.' trong kho !');
             return redirect()->route('admin.warehouse.import');
         }
-        $product->pro_number = $product->pro_number + $request->product_number;
-        $product->save();
+        
+        //$add = $warehouse->Product()->where('warehouse_id',$wh_id)->where('wh_product_id',$id)->firstOrFail()->pivot->quantity;
+        if($warehouse->Product()->where('warehouse_id',$wh_id)->where('wh_product_id',$id)->exists())
+        {
         $add = $warehouse->Product()->where('warehouse_id',$wh_id)->where('wh_product_id',$id)->firstOrFail()->pivot->quantity;
         
-        //$add = $wh->pivot->quantity;
-        
         $warehouse->Product()->updateExistingPivot($id,['quantity'=>$request->product_number + $add]);
-       
+        }
+        else 
+        $warehouse->Product()->attach($wh_id,['wh_product_id'=>$id,'quantity'=>$request->product_number]);
+
+        $total_quantity = $warehouse->Product()->where('wh_product_id',$id)->get()->sum('pivot.quantity');
+        $product->pro_number = $total_quantity;
+        $product->save();
+
         // WareHouse::insert(
         //     [
         //         'wh_product_id' => $id,
@@ -112,6 +119,29 @@ class AdminWarehouseController extends Controller
 
         $warehouse = WareHouse::find($wh_id);   
         $warehouse->Product()->attach($wh_id,['wh_product_id'=>$pro_id,'quantity'=>0]);
+        return redirect()->route('admin.warehouse.stock');
+    }
+
+    public function transfer(Request $request)
+    {
+        $product_id = $request->product_id;
+        $pro_id = Product::find($product_id)->id;
+
+        $warehouse_id_1 = $request->warehouse_id_1;
+        $wh_id_1 = WareHouse::find($warehouse_id_1)->id;
+
+        $warehouse_id_2 = $request->warehouse_id_2;
+        $wh_id_2 = WareHouse::find($warehouse_id_2)->id;
+
+        $warehouse1 = WareHouse::find($wh_id_1);
+        $warehouse2 = WareHouse::find($wh_id_2);
+
+        $quantity1 = $warehouse1->Product()->where('warehouse_id',$wh_id_1)->where('wh_product_id',$pro_id)->firstOrFail()->pivot->quantity;
+        $quantity2 = $warehouse2->Product()->where('warehouse_id',$wh_id_2)->where('wh_product_id',$pro_id)->firstOrFail()->pivot->quantity;
+
+        $warehouse1->Product()->updateExistingPivot($pro_id,['quantity'=> $quantity1 -  $request->product_num]);
+        $warehouse2->Product()->updateExistingPivot($pro_id,['quantity'=> $quantity2 +  $request->product_num]);
+        
         return redirect()->route('admin.warehouse.stock');
     }
 
