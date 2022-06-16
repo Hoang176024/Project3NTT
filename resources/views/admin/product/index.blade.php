@@ -73,7 +73,7 @@
                           <b>{{$pro->pro_name}}</b><br/>
                           <ul style="padding:0px">
                             <li>Số lượng: {{$pro->pro_number}}</li>
-                            <li>Giá: {{number_format($pro->pro_price,0,',','.')}} VNĐ</li>
+                            <li>Giá: {{number_format($pro->pro_price,0,",",".")}} VNĐ</li>
                             @if($pro->pro_sale)
                             <li>Đang giảm giá ( -{{$pro->pro_sale}}% )</li>
                             @else
