@@ -26,6 +26,11 @@
 
     <!-- Main content -->
     <section class="content">
+    @if(session()->has('error'))
+    <div class="alert alert-danger">
+        {{ session()->get('error') }}
+    </div>
+    @endif
 
       <!-- Default box -->
       <div class="card">
@@ -63,10 +68,6 @@
             <div class="btn-group me-2">
                 <a class="btn btn-danger" href="{{route('admin.warehouse.create')}}" class="nav-link {{(request()->is('admin/warehouse/create'))?"active":""}}">Thêm kho</a>
             </div>&nbsp&nbsp&nbsp&nbsp&nbsp
-            <!--
-            <div class="btn-group me-2">
-                <a class="btn_import_product btn btn-success" href="{{route('admin.warehouse.import.WhPro')}}">Thêm hàng</a>
-            </div>&nbsp&nbsp&nbsp&nbsp&nbsp -->
             <div class="btn-group me-2">
                 <a class="btn_transfer_product btn btn-primary" href="{{route('admin.warehouse.transfer')}}">Chuyển hàng</a>
             </div>
@@ -75,45 +76,6 @@
     </section>
     <!-- /.content -->
 </div>
- <!-- /.content-wrapper -->
- <!--
- {{-- modal import products --}}
- <div class="modal fade" id="modal_import_product" tabindex="-1" role="dialog" aria-labelledby="modal_import_product" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <form action="#" class="form_import_product">
-            <div class="form-group">
-                            <label>Sản phẩm</label>
-                            <select id="product" name="product_id" class="form-control select2">
-                                @foreach($products as $product)
-                                <option value="{{$product->id}}">{{$product->pro_name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                <div class="form-group">
-                            <label>Nhà kho</label>
-                            <select id="warehouse" name="warehouse_id" class="form-control select2">
-                                @foreach($warehouses as $warehouse)
-                                <option value="{{$warehouse->id}}">{{$warehouse->wh_name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-          <button type="button" class="btn btn-primary btn_accept_import">Đồng ý</button>
-        </div>
-      </div>
-    </div>
-  </div>
- {{-- end modalimport products --}}
--->
  {{-- modal transfer products --}}
  <div class="modal fade" id="modal_transfer_product" tabindex="-1" role="dialog" aria-labelledby="modal_transfer_product" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -195,24 +157,6 @@
     });
   });
 </script>
-<!--
-  <script>
-  $(".btn_import_product").click(function(e)
-  {
-    e.preventDefault();
-    url = $(this).attr('href');
-    name= $(this).attr('data-name');
-    $(".name_product_import").text(name);
-    $(".form_import_product").attr("action",url);
-    $("#modal_import_product").modal('show');
-  });
-  $(".btn_accept_import").click(function(e)
-  {
-    e.preventDefault();
-    $(".form_import_product").submit();
-  });
-</script>
--->
 <script>
   $(".btn_transfer_product").click(function(e)
   {
