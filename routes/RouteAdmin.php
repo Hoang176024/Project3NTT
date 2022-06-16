@@ -87,6 +87,7 @@ Route::group(['namespace'=>'Admin','prefix'=>'/admin','middleware'=>'checkAdminL
         Route::get('/history','AdminWarehouseController@history')->name('admin.warehouse.history');
         Route::get('/stock','AdminWarehouseController@stock')->name('admin.warehouse.stock');
         Route::get('/create','AdminWarehouseController@create')->name('admin.warehouse.create');
+        Route::get('/transfer','AdminWarehouseController@transfer')->name('admin.warehouse.transfer');
         Route::post('/create','AdminWarehouseController@store')->name('admin.warehouse.store');
         Route::get('/iventory','AdminWarehouseController@iventory')->name('admin.warehouse.iventory');
         Route::get('/bestseller','AdminWarehouseController@bestSeller')->name('admin.warehouse.bestseller');

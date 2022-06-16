@@ -71,7 +71,7 @@
                           <img style="width:80px;height:80px" src="{{asset('noimg.png')}}" alt="No Avatar"/>
                           @endif
                         </td>
-                        <td style="text-align: center">{{$pro->pro_number}}</td>
+                        <td style="text-align: center">{{number_format($pro->pro_number,0,',','.')}}</td>
                         <td style="text-align: center">
                           <a href="{{route('admin.warehouse.import.product',$pro->id)}}" data-name="{{$pro->pro_name}}" class="btn_import_product btn btn-success btn-circle"><i class="fa fa-plus-circle"></i></a>
                         </td>
@@ -105,7 +105,7 @@
                     <input type="number" name="product_number" class="form-control"/>
                 </div>
                 <div class="form-group">
-                            <label>Warehouse</label>
+                            <label>Nhà kho</label>
                             <select id="warehouse" name="warehouse_id" class="form-control select2">
                                 @foreach($warehouses as $warehouse)
                                 <option value="{{$warehouse->id}}">{{$warehouse->wh_name}}</option>
